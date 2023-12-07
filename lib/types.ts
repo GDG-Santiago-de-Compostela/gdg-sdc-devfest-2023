@@ -66,6 +66,7 @@ export type Talk = {
   speaker: Speaker[];
   slug?: string;
   topic?: number;
+  slides?: string;
 };
 
 export type Link = {

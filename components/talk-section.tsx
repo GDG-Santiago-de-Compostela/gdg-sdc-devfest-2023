@@ -25,6 +25,7 @@ import IconAvatar from './icons/icon-avatar';
 import IconCheck from './icons/icon-check';
 import IconTwitter from './icons/icon-twitter';
 import React from 'react';
+import LinkButton from './hms/LinkButton';
 
 type Props = {
   talk: Talk;
@@ -33,11 +34,11 @@ type Props = {
 export default function TalkSection({ talk }: Props) {
   const dayFormatted = React.useMemo(() => {
     const time = new Date(talk.start);
-    const dateInLowercase =  time.toLocaleDateString(new Intl.Locale('es-ES'), {dateStyle: 'full'});
+    const dateInLowercase = time.toLocaleDateString(new Intl.Locale('es-ES'), { dateStyle: 'full' });
     const dateInSentenceCase = dateInLowercase.charAt(0).toUpperCase() + dateInLowercase.slice(1);
     return dateInSentenceCase;
   }
-  , [talk.start]);
+    , [talk.start]);
 
   return (
     <>
@@ -78,10 +79,16 @@ export default function TalkSection({ talk }: Props) {
               <span className={styles.company}>{dayFormatted}</span>
             </p>
             <p className={styles.hours}>
-              <span className={styles.company}>{`${new Date(talk.start).toLocaleTimeString(new Intl.Locale('es-ES'), {timeStyle: 'short'})} - ${new Date(talk.end).toLocaleTimeString(new Intl.Locale('es-ES'), {timeStyle: 'short'})}`}</span>
+              <span className={styles.company}>{`${new Date(talk.start).toLocaleTimeString(new Intl.Locale('es-ES'), { timeStyle: 'short' })} - ${new Date(talk.end).toLocaleTimeString(new Intl.Locale('es-ES'), { timeStyle: 'short' })}`}</span>
             </p>
             <h2 className={styles['bio-header']}>Descripción</h2>
             <p className={styles.bio}>{talk.description}</p>
+            {/* Boton para descargar las diapositivas */}
+            {talk.slides && (
+              <LinkButton className="mt-8 w-fit px-8" href={talk.slides} target="_blank" rel="noopener noreferrer">
+                Descargar materiales
+              </LinkButton>
+            )}
             <h2 className={styles['speakers-header']}>Speaker{talk.speaker?.length > 1 && 's'}</h2>
             {talk.speaker?.map(s => (
               <a className={styles['avatar-group']} href={`/speakers/${s.slug}`}>

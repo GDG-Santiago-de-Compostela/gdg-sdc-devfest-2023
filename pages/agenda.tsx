@@ -94,7 +94,8 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
             slug: session.id,
             isServiceSession: session.isServiceSession,
             isPlenumSession: session.isPlenumSession,
-            topic: session.categories?.find((category: any) => category.id === TOPIC_CATEGORY_ID)?.categoryItems[0].id ?? null
+            topic: session.categories?.find((category: any) => category.id === TOPIC_CATEGORY_ID)?.categoryItems[0].id ?? null,
+            slides: session['questionAnswers']?.find((question: any) => question.id === 64962).answer ?? null,
           }))
         ]
       ), [])

@@ -64,33 +64,33 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     }
     );
 
-  const allTalks = await fetch('https://sessionize.com/api/v2/skykx1cq/view/GridSmart').then(res => res.json()).then((data: any[]) => data.reduce((prevList: any[], date: any) => (
+  const allTalks = await fetch('https://sessionize.com/api/v2/skykx1cq/view/Sessions').then(res => res.json()).then((data: any[]) => data.reduce((prevList: any[], groups: any) => (
     [
       ...prevList,
-      ...date.rooms.reduce((prevRooms: any[], room: any) => (
-        [
-          ...prevRooms,
-          ...room.sessions.map((session: any) => ({
-            title: session.title,
-            description: session.description,
-            start: session.startsAt,
-            end: session.endsAt,
-            speaker: session.speakers[0] ?
-              session.speakers.map((speaker: any) => (
-                // Get the full speaker details from the list
-                allSpeakers.find((s: any) => s.slug === speaker.id)
-              )).sort((a: any, b: any) => a.name.localeCompare(b.name))
-                .sort((a: any, b: any) => b.isTopSpeaker - a.isTopSpeaker)
-              : null,
-            stage: {
-              name: room.name
-            },
-            slug: session.id,
-            isServiceSession: session.isServiceSession,
-            isPlenumSession: session.isPlenumSession
-          }))
-        ]
-      ), [])
+      ...groups.sessions.reduce((prevRooms: any[], session: any) => {
+        console.log(session); return (
+          [
+            ...prevRooms,
+            {
+              title: session.title,
+              description: session.description,
+              start: session.startsAt,
+              end: session.endsAt,
+              speaker: session.speakers[0] ?
+                session.speakers.map((speaker: any) => (
+                  // Get the full speaker details from the list
+                  allSpeakers.find((s: any) => s.slug === speaker.id)
+                )).sort((a: any, b: any) => a.name.localeCompare(b.name))
+                  .sort((a: any, b: any) => b.isTopSpeaker - a.isTopSpeaker)
+                : null,
+              slug: session.id,
+              isServiceSession: session.isServiceSession,
+              isPlenumSession: session.isPlenumSession,
+              slides: session['questionAnswers']?.find((question: any) => question.id === 64962).answer ?? null,
+            }
+          ]
+        )
+      }, [])
     ]
   ), []))
     .catch((e) => {
